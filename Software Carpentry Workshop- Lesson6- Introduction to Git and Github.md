@@ -32,7 +32,7 @@ Unless there are conflicts, you can combine two sets of changes onto the same ba
 
 ![](http://swcarpentry.github.io/git-novice/fig/merge.svg)
 
-**Github** is a cloud service that hosts repositories, it is a central hub to hold all our local repositories. Github has additional functionality that enables efficient collaboration.
+**GitHub** is a cloud service that hosts repositories, it is a central hub to hold all our local repositories. GitHub has additional functionality that enables efficient collaboration.
 
 
 ![](https://github.com/AnnaWilliford/2017-11-11-UTA/raw/gh-pages/workshop/images/github_bigPicture.png)
@@ -49,14 +49,18 @@ When we use Git on a new computer for the first time, we need to configure a few
 - our name and email address,
 - to colorize our output,
 - what our preferred text editor is,
-- and that we want to use these settings globally (i.e. for every project)
+- and that we want to use these settings globally (i.e., for every project)
 
-On a command line, Git commands are written as `git verb`, where `verb` is what we actually want to do. 
+On a command line, Git commands are written as `git verb`, where `verb` is what we actually want to do. The flag `--global` tells Git to use the setting for every project in your user account on this computer.
+
 ```shell
-$ git config --global user.name "Your username"
-$ git config --global user.email "Your email" 
+$ git config --global user.name "your username"
+$ git config --global user.email "your email" 
 $ git config --global color.ui "auto"
+```
+Next, choose from one of the four commands below.
 
+```shell
 #add a text editor of your choice 
 #Mac: Text Wrangler
 $ git config --global core.editor "edit -w"
@@ -70,7 +74,6 @@ $ git config --global core.editor "C:/Program Files (x86)/Notepad++/notepad++.ex
 #Linux
 $ git config --global core.editor "gedit --wait --new-window"
 ```
-The four commands we just ran above only need to be run once: the flag --global tells Git to use the settings for every project, in your user account, on this computer.
 
 You can check your settings at any time:
 ```shell
