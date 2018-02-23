@@ -58,10 +58,9 @@ $ git config --global user.name "your username"
 $ git config --global user.email "your email" 
 $ git config --global color.ui "auto"
 ```
-Next, choose from one of the four commands below.
+Next, choose from one of the four commands below to add a text editor of your choice.
 
 ```shell
-#add a text editor of your choice 
 #Mac: Text Wrangler
 $ git config --global core.editor "edit -w"
 
@@ -93,10 +92,10 @@ We will explore some of them next.
 
 ## 3. Track your documents with Git
 
-We are now ready to use Git.
-To start with, let's make a new folder `git_test` on your Desktop, outside `SWC_fall2017` directory.
+We are now ready to use Git now that it's been configured.
+To start with, let's make a new folder `git_test` on your Desktop, outside `SWC_spring2018` directory.
 
-Suppose you started working on your thesis. You create a folder `Thesis` inside `git_test` . 
+Let’s create a directory for our work and then move into that directory. Suppose you started working on your thesis. Create a directory within `git_test`. 
 ```shell
 #go to git_test
 cd git_test
