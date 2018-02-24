@@ -1,4 +1,4 @@
-Software Carpentry Workshop: Lesson6: Introduction to Git and Github
+Software Carpentry Workshop: Lesson 6: Introduction to Git and Github
 ===
 
 SWC workshop, February 22
@@ -58,11 +58,14 @@ $ git config --global user.name "your username"
 $ git config --global user.email "your email" 
 $ git config --global color.ui "auto"
 ```
-Next, choose from one of the four commands below to add a text editor of your choice.
+Next, choose from one of the following commands below to add a text editor of your choice.
 
 ```shell
-#Mac: Text Wrangler
-$ git config --global core.editor "edit -w"
+#Mac: BBEdit
+$ git config --global core.editor "bbedit -w"
+
+#Mac: Sublime Text
+$ git config --global core.editor "subl -n -w"
 
 #Windows: notepad
 $ git config --global core.editor "notepad"
@@ -92,8 +95,12 @@ We will explore some of them next.
 
 ## 3. Track your documents with Git
 
-We are now ready to use Git now that it's been configured.
-To start with, let's make a new folder `git_test` on your Desktop, outside `SWC_spring2018` directory.
+Let's use Git now that it's been configured. We’ll do our work in the `SWC_spring2018` folder. Check where you are using `pwd`. To change your working directory, use the `cd` command.
+```shell
+cd SWC_spring2018
+```
+
+To start with, let's make a new folder `git_test` in the `SWC_spring2018` directory.
 
 Let’s create a directory for our work and then move into that directory. Suppose you started working on your thesis. Create a directory within `git_test`. 
 ```shell
@@ -106,27 +113,35 @@ $ mkdir Thesis
 #go into Thesis folder
 $ cd Thesis
 
-#check Thesis contents
+#check Thesis contents (list files)
+$ls
+```
+
+There is nothing, as expected. To show hidden files, add the flag `-a`.
+```shell
 $ ls -a 
 ./  ../ 
 ```
-At this point we have the expected output. Let's make a new file in this folder, say a file for thesis notes.
+At this point we have the expected output. Let's make a new file in this folder, say a file for thesis notes. The file, titled "notes.txt" will contain the text "Chapter 1 notes.
 ```shell
-$ echo "Chapeter 1 notes" > notes.txt
+$ echo "Chapter 1 notes" > notes.txt
 
-$ ls -a
-./  ../  notes.txt
-
+#Now, listing contents, we see the added file.
+$ ls
+notes.txt
+```
+Let's read the contents of the file with the `cat` command.
+```shell
 $ cat notes.txt
 ```
-We can ask now if our new file, `notes.txt` is being tracked. We can do this with `git status` command
+We can ask now if our new file, `notes.txt` is being tracked. We can do this with `git status` command.
 ```shell
 $ git status
 fatal: Not a git repository (or any of the parent directories): .git
 ```
-This message means that `Thesis` folder is not under the control of Git, none of the documents within this folder are being tracked.
+This message means that `Thesis` folder is not under the control of Git, and none of the documents within this folder are being tracked.
 
-To place a folder under Git control, we need to initialize out `Thesis` folder.
+To place a folder under Git control, we need to initialize our `Thesis` folder to make it a repository—a place where Git can store versions of our files:
 
 ```shell
 #check that you are in Thesis
@@ -134,15 +149,15 @@ $ pwd
 
 #initialize Thesis directory with Git
 $ git init
-Initialized empty Git repository in ...
+Initialized empty Git repository in .../Thesis/.git/
 
-#check content
+#check contents to see the added directory
 $ ls -a
 ./  ../  .git/  notes.txt
 ```
-The folder that contains .git directory is called ***repository***
+The folder (in this case, Thesis) that contains .git sub-directory is called ***repository***. Git uses this (.git) special sub-directory to store all the information about the project, including all files and sub-directories located within the project’s directory. If we ever delete the .git sub-directory, we will lose the project’s history.
 
-Let's try `git status` command now.
+We can check that everything is set up correctly by asking Git to tell us the status of our project. Let's try thw `git status` command now.
 ```
 $ git status
 On branch master
@@ -156,7 +171,41 @@ Untracked files:
 
 nothing added to commit but untracked files present (use "git add" to track)
 ```
-You can see that initializing a directory makes it visible to Git. Now Git tells us what files are in the directory and what is their status. In our case, Git says that there is notes.txt file and it is not tracked. Git also tells us that we need to use `git add` command to start tracking this file.
+You can see that initializing a directory makes it visible to Git. 
+
+>  ## Activity: Places to Create Git Repositories
+> Along with tracking information for your Thesis (the project we have already created), say one would also like to track > information about each chapter. Despite a collaborator's concerns, you create a Ch1 project inside your Thesis project with the following sequence of commands:
+> ~~~
+> $ cd             # return to home directory
+> $ cd Thesis    # go into Thesis directory, which is already a Git repository
+> $ ls -a          # ensure the .git sub-directory is still present in the Thesis directory
+> $ mkdir Ch1    # make a sub-directory Thesis/Ch1
+> $ cd Ch1       # go into Ch1 sub-directory
+> $ git init       # make the Ch1 sub-directory a Git repository
+> $ ls -a          # ensure the .git sub-directory is present indicating we have created a new Git repository
+> ~~~
+> {: .bash}
+>
+> Is the `git init` command, run inside the `Ch1` sub-directory, required for 
+> tracking files stored in the `Ch1` sub-directory?
+> 
+> > ## Solution
+> >
+> > No. You don't need to make the `Ch1` sub-directory a Git repository 
+> > because the `Thesis` repository will track all files, sub-directories, and 
+> > sub-directory files under the `Thesis` directory.  Thus, in order to track 
+> > all information about Ch1, you only needed to add the `Ch1` sub-directory
+> > to the `Thesis` directory.
+> > 
+> > Additionally, Git repositories can interfere with each other if they are "nested" in the
+> > directory of another: The outer repository will try to version-control
+> > the inner repository. Therefore, it's best to create each new Git
+> > repository in a separate directory. To be sure that there is no conflicting
+> > repository in the directory, check the output of `git status`. If it looks
+> > like the following, you are good to go to create a new repository as shown
+> > above.
+
+Now Git tells us what files are in the directory and what is their status. In our case, Git says that there is notes.txt file and it is not tracked. Git also tells us that we need to use `git add` command to start tracking this file.
 ```
 $ git add notes.txt
 
