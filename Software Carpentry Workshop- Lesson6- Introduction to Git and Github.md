@@ -184,7 +184,6 @@ You can see that initializing a directory makes it visible to Git.
 > $ git init       # make the Ch1 sub-directory a Git repository
 > $ ls -a          # ensure the .git sub-directory is present indicating we have created a new Git repository
 > ~~~
-> {: .bash}
 >
 > Is the `git init` command, run inside the `Ch1` sub-directory, required for 
 > tracking files stored in the `Ch1` sub-directory?
