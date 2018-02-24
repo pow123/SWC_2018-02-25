@@ -202,7 +202,36 @@ You can see that initializing a directory makes it visible to Git.
 > > repository in a separate directory. To be sure that there is no conflicting
 > > repository in the directory, check the output of `git status`. If it looks
 > > like the following, you are good to go to create a new repository as shown
-> > above.
+> > above:
+> >
+> > ~~~
+> > $ git status
+> > ~~~
+> > {: .bash}
+> > ~~~
+> > fatal: Not a git repository (or any of the parent directories): .git
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
+> ## Correcting `git init` Mistakes
+> Since a nested repository is redundant and may cause confusion down the road, you would like to remove the nested repository. How can you undo your last `git init` in the `Ch1` sub-directory?
+>
+> > ## Solution -- USE WITH CAUTION!
+> >
+> > To recover from this little mistake, just remove the `.git` folder in the Ch1 sub-directory by running the following command from inside the 'Ch1' directory:
+> >
+> > ~~~
+> > $ rm -rf Ch1/.git
+> > ~~~
+> > {: .bash}
+> >
+> > But be careful! Running this command in the wrong directory, will remove
+> > the entire git-history of a project you might want to keep. Therefore, always check your current directory using the
+> > command `pwd`.
+> {: .solution}
+{: .challenge}
+
 
 Now Git tells us what files are in the directory and what is their status. In our case, Git says that there is notes.txt file and it is not tracked. Git also tells us that we need to use `git add` command to start tracking this file.
 ```
