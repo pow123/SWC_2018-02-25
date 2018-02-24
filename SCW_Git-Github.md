@@ -173,7 +173,7 @@ nothing added to commit but untracked files present (use "git add" to track)
 ```
 You can see that initializing a directory makes it visible to Git. 
 
->  ## Activity: Places to Create Git Repositories
+>  ## Activity 3A: Places to Create Git Repositories
 > Along with tracking information for your Thesis (the project we have already created), say one would also like to track > information about each chapter. Despite a collaborator's concerns, you create a Ch1 project inside your Thesis project with the following sequence of commands:
 > ~~~
 > $ cd             # return to home directory
@@ -184,7 +184,7 @@ You can see that initializing a directory makes it visible to Git.
 > $ git init       # make the Ch1 sub-directory a Git repository
 > $ ls -a          # ensure the .git sub-directory is present indicating we have created a new Git repository
 > ~~~
->
+>{: .bash}
 > Is the `git init` command, run inside the `Ch1` sub-directory, required for 
 > tracking files stored in the `Ch1` sub-directory?
 > 
@@ -233,7 +233,7 @@ You can see that initializing a directory makes it visible to Git.
 {: .challenge}
 
 
-Now Git tells us what files are in the directory and what is their status. In our case, Git says that there is notes.txt file and it is not tracked. Git also tells us that we need to use `git add` command to start tracking this file.
+If you are still in `Ch1`, navigate back to `Thesis` using the `cd` command. Now Git tells us what files are in the directory and what is their status. In our case, Git says that there is a notes.txt file and it is not tracked. The “untracked files” message means that there’s a file in the directory that Git isn’t keeping track of.  Git also tells us that we need to use `git add` command to start tracking this file:
 ```
 $ git add notes.txt
 
@@ -247,18 +247,18 @@ Changes to be committed:
 
         new file:   notes.txt
 ```
-The current version of `notes.txt` is now ready (or staged) to be recorded by Git. To record the current version of notes.txt, `git commit` command is used
+The current version of `notes.txt` is now ready (or staged) to be recorded by Git. If we check the status of our project again (`git status`), Git tells us that it’s noticed the new file. To record the current version of notes.txt, `git commit` command is used.
 ```
 #commit changes
-$ git commit -m "first note"
+$ git commit -m "Start notes for Thesis"
 
-[master (root-commit) 851e745] first note
+[master (root-commit) 76604e5] first note
  1 file changed, 1 insertion(+)
  create mode 100644 notes.txt
 ```
-When we run `git commit`, Git takes everything we have told it to save by using `git add` and stores a copy permanently inside the special `.git` directory. This permanent copy is called a **commit** (or revision) and its short identifier is 851e745 (Your commit may have another identifier.)
+When we run `git commit`, Git takes everything we have told it to save by using `git add` and stores a copy permanently inside the special `.git` directory. This permanent copy is called a **commit** (or revision) and its short identifier is 76604e5 (Your commit may have another identifier.)
 
-We use the -m flag (for “message”) to record a short, descriptive, and specific comment that will help us remember later on what we did and why. If we just run `git commit` without the -m option, Git will launch nano (or whatever other editor we configured as core.editor) so that we can write a longer message.
+We use the -m flag (for “message”) to record a short, descriptive, and specific comment that will help us remember later on what we did and why. If we just run `git commit` without the -m option, Git will launch BBEdit (or whatever other editor we configured as core.editor) so that we can write a longer message.
 
 Good commit messages start with a brief (<50 characters) summary of changes made in the commit. If you want to go into more detail, add a blank line between the summary line and your additional notes.
 
@@ -275,11 +275,11 @@ You can check the history of your commits:
 ```
 $ git log
 
-commit 851e745b2d4c72541cce750ba1d19d6b3d59ee6a
-Author: AnnaWilliford <awillifo@uta>
-Date:   Thu Nov 2 13:29:28 2017 -0500
+commit 76604e57022d52b2ebf3c92d0f5358354850fa37 (HEAD -> master)
+Author: pow123 <peace@uta.edu>
+Date:   Sun Feb 24 15:15:00 2018 -0600
 
-    first note 
+    Start notes for Thesis
     
 #or for a faster view
 $ git log --oneline
@@ -294,47 +294,52 @@ In summary, here are the steps that must be completed to track changes in your d
 ![](http://swcarpentry.github.io/git-novice/fig/git-staging-area.svg)
 
 
-
- **Challenge 3.1:**
-```
- Open notes.txt in text editor and add a line of text to it. 
- Save your changes and track your changes with Git.
-```
->**Solution**
->
-> Open note.txt, add text, save and close.
-> You can see your new note.txt with 
-> $ cat notes.txt
+>  ## Activity 3B: Adding and Tracking Changes
+> Open notes.txt in text editor and add the following line of text to it: "Chapter 2 notes"
+> Save your changes and track your changes with Git.
 > 
-> Chapter 1 notes
-> Chapter 2 notes
-
-> $ git status
-> On branch master
-> Changes not staged for commit:
+> > ## Solution
+> >
+> > Open note.txt, add text, save and close. (Or, from the command line, type `open -t notes.txt` to open it in BBEdit.
+> > You can see your new additions to note.txt with 
+> > ~~~
+> > $ cat notes.txt
+> > Chapter 1 notes
+> > Chapter 2 notes
+> >
+> > $ git status
+> > On branch master
+> > Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
->
->    modified:   notes.txt
->
->no changes added to commit (use "git add" and/or "git commit -a")
->
-> $ git add notes.txt
-> $ git commit -m "added chapter2 notes"
-
+> >
+> >   modified:   notes.txt
+> >
+> > no changes added to commit (use "git add" and/or "git commit -a")
+> >
+> > $ git add notes.txt
+> > $ git commit -m "added ch 2 notes"
+> > ~~~
+> > {: .bash}
+> {: .solution}
+{: .challenge}
+  
 Now, run `git log`.  The output of `git log` tells you the history of your changes. Your commit messages are very important, in case you want to restore an old version of the document, they will help you to pick out the version you want.
 
-Your versions (or commits) have unique identifiers. In addition, the most recent version can be identified by `HEAD`. You can see differences betwee any 2 versions by using `git diff` command:
+Your versions (or commits) have unique identifiers. In addition, the most recent version can be identified by `HEAD`. You can see differences between any 2 versions by using `git diff` command:
 ```shell
 #you can specify only first few characters of the commit identifier.
-$ git diff 851e745b2 HEAD notes.txt
+$ git diff 76604e5 HEAD notes.txt
 ```
  
-Now, let's see how to turn an existing directory into git repository. You might want to track files for some of your existing projects. Maybe for `SWC_fall2017` directory? How will you place this directory under Git control?
+Now, let's see how to turn an existing directory into a git repository. You might want to track files for some of your existing projects. Maybe for the `SWC_spring2018` directory? How will you place this directory under Git control?
 
 ```
-#Go to SWC_fall2017
-$ cd ~/Desktop/SWC_fall2017
+#Go to SWC_spring2018
+$ cd ../.. 
+
+#Or type the path directly
+$ cd ~/Desktop/SWC_spring2018
 
 #initialize
 $ git init
@@ -346,7 +351,7 @@ $ git status
 $ git add .
 
 #commit changes 
-$ git commit -m "added SWC_fall2017 directory"
+$ git commit -m "added SWC_spring2018 directory"
 
 #check commit history
 $ git log
@@ -356,20 +361,19 @@ Now every file in this directory is being tracked.
 Notice that we added multiple folders and files in the same commit. If you want to know what files were included in this commit:
 ```
 # print the list of files that are part of a given commit
-$ git show --name-only 1e228d70f
+$ git show --name-only 8af5f83
 ```
 As you continue working on this project, you will be adding new directories and files to it.
 Let's try it.
 
-**Challenge 3.2**
-```
-Make a new directory `git_github` in `SWC_fall2017`. 
-Make a file called git_steps.txt inside `git_github`. 
-Record `git` commands you must use to start tracking your changes.
-Save this file and commit `git_github` directory to Git.
-
-NOTE:`git init` should only be run one time in the root directory of your project. 
-```
+> ## Activity 3C: Practice Learned Skills
+> Make a new directory `git_github` in `SWC_spring2018`. 
+> Make a file called git_steps.txt inside `git_github`. 
+> Record `git` commands you must use to start tracking your changes.
+> Save this file and commit `git_github` directory to Git.
+> 
+> NOTE:`git init` should only be run one time in the root directory of your project. 
+> {: .challenge}
  
 ## 4. Accessing older versions
 
