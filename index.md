@@ -157,7 +157,7 @@ $ ls -a
 ```
 The folder (in this case, Thesis) that contains .git sub-directory is called ***repository***. Git uses this (.git) special sub-directory to store all the information about the project, including all files and sub-directories located within the project’s directory. If we ever delete the .git sub-directory, we will lose the project’s history.
 
-We can check that everything is set up correctly by asking Git to tell us the status of our project. Let's try thw `git status` command now.
+We can check that everything is set up correctly by asking Git to tell us the status of our project. Let's try the `git status` command now.
 ```
 $ git status
 On branch master
@@ -173,7 +173,7 @@ nothing added to commit but untracked files present (use "git add" to track)
 ```
 You can see that initializing a directory makes it visible to Git. 
 
->  ## Activity 3A: Places to Create Git Repositories
+> ## Activity 3A: Places to Create Git Repositories
 > Along with tracking information for your Thesis (the project we have already created), say one would also like to track > information about each chapter. Despite a collaborator's concerns, you create a Ch1 project inside your Thesis project with the following sequence of commands:
 > ~~~
 > $ cd             # return to home directory
