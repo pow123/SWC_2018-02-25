@@ -62,7 +62,7 @@ Next, choose from one of the following commands below to add a text editor of yo
 
 ```shell
 #Mac: BBEdit
-$ git config --global core.editor "bbedit -w"
+ $ git config --global core.editor "BBEdit -w"
 
 #Mac: Sublime Text
 $ git config --global core.editor "subl -n -w"
@@ -256,7 +256,11 @@ $ git commit -m "Start notes for Thesis"
  1 file changed, 1 insertion(+)
  create mode 100644 notes.txt
 ```
-When we run `git commit`, Git takes everything we have told it to save by using `git add` and stores a copy permanently inside the special `.git` directory. This permanent copy is called a **commit** (or revision) and its short identifier is 76604e5 (Your commit may have another identifier.)
+Git insists that we add files to the set we want to commit before actually committing anything. This allows us to commit our changes in stages and capture changes in logical portions rather than only large batches. For example, suppose we’re adding a few citations to relevant research to our thesis. We might want to commit those additions, and the corresponding bibliography entries, but not commit some of our work drafting the conclusion (which we haven’t finished yet).
+
+To allow for this, Git has a special staging area where it keeps track of things that have been added to the current changeset but not yet committed. When we run `git commit`, Git takes everything we have told it to save by using `git add` and stores a copy permanently inside the special `.git` directory. This permanent copy is called a [commit]({{ page.root }}/reference/#commit)
+(or [revision]({{ page.root }}/reference/#revision)) and its short identifier is 76604e5 (Your commit may have another identifier.)
+
 
 We use the -m flag (for “message”) to record a short, descriptive, and specific comment that will help us remember later on what we did and why. If we just run `git commit` without the -m option, Git will launch BBEdit (or whatever other editor we configured as core.editor) so that we can write a longer message.
 
@@ -269,9 +273,9 @@ $ git status
 On branch master
 nothing to commit, working tree clean
 ```
-Everything is up to date!
+Everything is up to date! 
 
-You can check the history of your commits:
+You can check the history of your commits with `git log`. This command lists all commits made to a repository in reverse chronological order. The listing for each commit includes the commit’s full identifier (which starts with the same characters as the short identifier printed by the git commit command earlier), the commit’s author, when it was created, and the log message Git was given when the commit was created:
 ```
 $ git log
 
@@ -294,14 +298,14 @@ In summary, here are the steps that must be completed to track changes in your d
 ![](http://swcarpentry.github.io/git-novice/fig/git-staging-area.svg)
 
 
->  ## Activity 3B: Adding and Tracking Changes
+> ## Activity 3B: Adding and Tracking Changes
 > Open notes.txt in text editor and add the following line of text to it: "Chapter 2 notes"
 > Save your changes and track your changes with Git.
 > 
 > > ## Solution
 > >
 > > Open note.txt, add text, save and close. (Or, from the command line, type `open -t notes.txt` to open it in BBEdit.
-> > You can see your new additions to note.txt with 
+> > When we run git status now, it tells us that a file it already knows about has been modified. You can also see your new additions to note.txt with `cat`:
 > > ~~~
 > > $ cat notes.txt
 > > Chapter 1 notes
@@ -316,7 +320,9 @@ In summary, here are the steps that must be completed to track changes in your d
 > >   modified:   notes.txt
 > >
 > > no changes added to commit (use "git add" and/or "git commit -a")
-> >
+> > ~~~
+> > {: .bash}
+> > The last line is the key phrase: “no changes added to commit.” We have changed this file, but we haven’t told Git we will want to save those changes (which we do with `git add`) and we haven't saved them (which we do with `git commit`). So let’s do that now:
 > > $ git add notes.txt
 > > $ git commit -m "added ch 2 notes"
 > > ~~~
@@ -326,20 +332,20 @@ In summary, here are the steps that must be completed to track changes in your d
   
 Now, run `git log`.  The output of `git log` tells you the history of your changes. Your commit messages are very important, in case you want to restore an old version of the document, they will help you to pick out the version you want.
 
-Your versions (or commits) have unique identifiers. In addition, the most recent version can be identified by `HEAD`. You can see differences between any 2 versions by using `git diff` command:
+Your versions (or commits) have unique identifiers. In addition, the most recent version can be identified by `HEAD`. It is also good practice to always review changes before saving them. We do this using `git diff`. This shows us the differences between the current state of the file and the most recently saved version:
 ```shell
 #you can specify only first few characters of the commit identifier.
 $ git diff 76604e5 HEAD notes.txt
 ```
  
-Now, let's see how to turn an existing directory into a git repository. You might want to track files for some of your existing projects. Maybe for the `SWC_spring2018` directory? How will you place this directory under Git control?
+Now, let's see how to turn an existing directory into a git repository. You might want to track files for some of your existing projects. Let's create a new directory: `git_github` in the `SWC_spring2018` folder. How will you place this directory under Git control?
 
 ```
-#Go to SWC_spring2018
-$ cd ../.. 
+#Go to git_github
+$ cd ../../git_github
 
 #Or type the path directly
-$ cd ~/Desktop/SWC_spring2018
+$ cd ~/Desktop/SWC_spring2018/git_github
 
 #initialize
 $ git init
@@ -351,37 +357,176 @@ $ git status
 $ git add .
 
 #commit changes 
-$ git commit -m "added SWC_spring2018 directory"
+$ git commit -m "added git_github directory"
 
 #check commit history
 $ git log
 ```
-Now every file in this directory is being tracked.
 
-Notice that we added multiple folders and files in the same commit. If you want to know what files were included in this commit:
+Now every file in this directory is being tracked. Notice that we added multiple folders and files in the same commit. If you want to know what files were included in this commit:
 ```
 # print the list of files that are part of a given commit
 $ git show --name-only 8af5f83
 ```
-As you continue working on this project, you will be adding new directories and files to it.
+As you continue working on this project, you will be adding new directories and files to it. 
 Let's try it.
 
-> ## Activity 3C: Practice Learned Skills
-> Make a new directory `git_github` in `SWC_spring2018`. 
+> ## Activity 3C: Tracking File Changes
 > Make a file called git_steps.txt inside `git_github`. 
 > Record `git` commands you must use to start tracking your changes.
 > Save this file and commit `git_github` directory to Git.
 > 
 > NOTE:`git init` should only be run one time in the root directory of your project. 
-> {: .challenge}
+{: .challenge}
  
-## 4. Accessing older versions
+> ## Activity 3D: Committing Multiple Files
+>
+> The staging area can hold changes from any number of files
+> that you want to commit as a single snapshot.
+>
+> 1. Add some text to `git_steps.txt`.
+> 2. Create a new file `github_steps.txt` and add text there.
+> 3. Add changes from both files to the staging area,
+> and commit those changes.
+>
+> > ## Solution
+> >
+> > First we add to  `git_steps.txt` then we create `github_steps.txt`:
+> > ~~~
+> > $ open -t git_steps.txt
+> > $ cat git_steps.txt
+> > ~~~
+> > {: .bash}
+> > ~~~
+> > Steps to using Git
+> > ~~~
+> > {: .output}
+> > ~~~
+> > $ echo "Steps to using GitHub" > github_steps.txt
+> > $ cat github_steps.txt
+> > ~~~
+> > {: .bash}
+> > ~~~
+> > Steps to using GitHub
+> > ~~~
+> > {: .output}
+> > Now you can add both files to the staging area. We can do that in one line:
+> >
+> > ~~~
+> > $ git add git_steps.txt github_steps.txt
+> > ~~~
+> > {: .bash}
+> > Or with multiple commands:
+> > ~~~
+> > $ git add git_steps.txt
+> > $ git add github_steps.txt
+> > ~~~
+> > {: .bash}
+> > Now the files are ready to commit. You can check that using `git status`. If you are ready to commit use:
+> > ~~~
+> > $ git commit -m "Added steps for Git and GitHub"
+> > ~~~
+> > {: .bash}
+> > ~~~
+> > [master e6a7d94] Added steps for Git and GitHub
+> >  2 files changed, 2 insertions(+)
+> >  create mode 100644 git_steps.txt
+> >  create mode 100644 github_steps.txt
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+## Optional Activity: Modifying Files
+>
+> * Write a three-line biography for yourself in a file called `about_me.txt`,
+> commit your changes
+> * Modify one line, add a fourth line
+> * Display the differences
+> between its updated state and its original state.
+> 
+> > ## Solution
+> >
+> > Create your biography file `about_me.txt` using `BBEdit` or another text editor.
+> > ~~~
+> > $ git add about_me.txt
+> > $ git commit -m'Adding biography file'
+> > ~~~
+> > {: .bash}
+> >
+> > Modify the file as described (modify one line, add a fourth line).
+> > To display the differences
+> > between its updated state and its original state, use `git diff`:
+> >
+> > ~~~
+> > $ git diff about_me.txt
+> > ~~~
+> > {: .bash}
+> >
+> {: .solution}
+{: .challenge}
+
+> ## Optional: Author and Committer
+>
+> For each of the commits you have done, Git stored your name twice.
+> You are named as the author and as the committer. You can observe
+> that by telling Git to show you more information about your last
+> commits:
+>
+> ~~~
+> $ git log --format=full
+> ~~~
+> {: .bash}
+>
+> When committing you can name someone else as the author:
+>
+> ~~~
+> $ git commit --author="Anne Example <anne@example.net>"
+> ~~~
+> {: .bash}
+>
+> Create a new repository and create two commits: one without the
+> `--author` option and one by naming a colleague of yours as the
+> author. Run `git log` and `git log --format=full`. Think about ways
+> how that can allow you to collaborate with your colleagues.
+>
+> > ## Solution
+> >
+> > ~~~
+> > $ git add about_me.txt
+> > $ git commit -m "Update my bio." --author="Anne Example <anne@example.net>"
+> > ~~~
+> > {: .bash}
+> > ~~~
+> > [master 963e793] Update my bio.
+> > Author: Anne Example <anne@example.net>
+> > 1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > $ git log --format=full
+> > commit 963e7931f16d91f1559197cb91d819fb87ca06e1
+> > Author: Author: Anne Example <anne@example.net>
+> > Commit: pow123 <peace@uta.edu>
+> >
+> > Update my bio.
+> >
+> > commit aaa3271e5e26f75f11892718e83a3e2743fab8ea
+> > Author: pow123 <peace@uta.edu>
+> > Commit: pow123 <peace@uta.edu>
+> >
+> > My initial bio.
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+
+## 4. Accessing previous versions
 
 The clear advantage of tracking your documents with Git is that you can always go back to the previous version. Let's see how this works.
 
 The output of `git log` provides all the information you need to retrieve the older version of the document.
 
-In our case, we do not have multiple versions of the same document, so let's modify our git_steps.txt and add a note to it:
+Let's modify our `git_steps.txt` and add a note to it:
 
 ```
 $ echo "Use git init only one time for every project" >>git_steps.txt
@@ -394,7 +539,6 @@ $ git commit -m "added note to git_steps.txt"
 #view latest version
 $ cat git_steps.txt
 ```
-
 Now, this is our second version of git_steps.txt. Our first version was stored when we first created the file, and our second version when we added a new line to it.
 
 Suppose that some time later, you want the original version of git_steps.txt. How would you do that?
@@ -410,8 +554,8 @@ If we want the original git_steps.txt:
 #see what commitID is associated with the original version
 git log --oneline
 
-#the commit that includes original file has message "added git_github directory" (or whatever you used when you committed the change)
-$ git checkout ad91ea0aab git_steps.txt
+#the commit that includes original file has message "Added steps for Git and GitHub" (or whatever you used when you committed the change)
+$ git checkout e6a7d94 git_steps.txt
 ```
 
 Now let's make sure that we have original version of git_steps.txt
@@ -445,45 +589,49 @@ $ git checkout -- git_steps.txt
 $ cat git_steps.txt
 ```
 
-## 5. Tracking Microsoft Word documents
+## 5. GitHub: Share your repository with the world
 
-This part of the lesson has been modified from this [source](http://blog.martinfenner.org/2014/08/25/using-microsoft-word-with-git/)
+So far, our work was restricted to the local machine. But if you want to share your repositories with your colleagues, it would be nice to have a central place where everyone could make their repositories available for comments, suggestions, and collaboration. GitHub is a service that allows us to do that. 
 
-Initially, git was designed to track changes to software source code. The functionality of Git is now greatly expanded and you can track various file formats, including documents written in Microsoft Word. But first, you need to convert word documents to plain text and let Git know that Pandoc is the tool you use to do it.
-- Install [pandoc](https://github.com/jgm/pandoc/releases/tag/2.0.1.1) for you system.
+If you have not created GitHub account, please go to [github.com] <https://github.com> and do it now. 
 
-- Create a new file, `.gitattributes` in your git project folder
+Now we want to create repository that will be a remote copy of our local `SWC_spring2018` repository. 
 ```
-#add this line to .gitattributes
-*.docx diff=pandoc
-```
-- Open `.gitconfig` file in your home directory
-```
-#add these lines to .gitconfig 
-
-[diff "pandoc"]
-  textconv=pandoc --to=markdown
-  prompt = false
-[alias]
-  wdiff = diff --word-diff=color --unified=1
-  ```
- The last command sets alias for `diff` command to `wdiff`. You can now use `git wdiff` to see changes between versions by word and not by line.
-
-## 6. GitHub: share your repository with the world
-
-So far, our work was restricted to the local machine. But if you want to share your repositories with your colleagues, it would be nice to have a central place where everyone could make their repositories available for comments/suggestions/collaborations. Github is a service that allows us to do that. 
-
-If you have not created Github account, please go to github.com and do it now. 
-
-Now we want to create repository that will be a remote copy of our local `SWC_fall2017` repository. 
-```
-#from your github account:
+#From your GitHub account:
 Click on 'new repository'
-Repository name: 'SWC_fall2017'
+Repository name: 'SWC_spring2018'
 Type: public
 Click on 'create repository'
 ```
-You have just created remote empty `SWC_fall2017` repository. This repository has a specific identifier URL associated with it. We now let our local machine know that we have a remote location for our local repository.
+You have just created remote empty `SWC_spring2018` repository. This repository has a specific identifier URL associated with it.  As soon as the repository is created, GitHub displays a page with that URL and some
+information on how to configure your local repository:
+
+![Creating a Repository on GitHub (Step 3)](./github-create-repo-03.png)
+
+This effectively does the following on GitHub's servers:
+
+~~~
+$ mkdir SWC_spring2018
+$ cd SWC_spring2018
+$ git init
+~~~
+{: .bash}
+
+Our local repository still contains our earlier work, but the
+remote repository on GitHub doesn't contain any files yet. 
+
+> ## HTTPS vs. SSH
+>
+> We use HTTPS here because it does not require additional configuration.  After
+> the workshop you may want to set up SSH access, which is a bit more secure, by
+> following one of the great tutorials from
+> [GitHub](https://help.github.com/articles/generating-ssh-keys),
+> [Atlassian/BitBucket](https://confluence.atlassian.com/display/BITBUCKET/Set+up+SSH+for+Git)
+> and [GitLab](https://about.gitlab.com/2014/03/04/add-ssh-key-screencast/)
+> (this one has a screencast).
+{: .callout}
+
+We now let our local machine know that we have a remote location for our local repository.
 ```
 #on your local machine
 $ git remote add origin URL
@@ -494,134 +642,66 @@ Once the nickname origin is set up, this command will push the changes from our 
 ```
 $ git push -u origin master
 ```
-This is it! You just made your local 'SWC_fall2017' repository available on Github to everyone. You are now in position to share your work and collaborate with others. How cool is this?
+This is it! You just made your local `SWC_spring2018` repository available on GitHub for everyone to access. You are now in position to share your work and collaborate with others. How cool is this?
 
----
-
-
-![](https://github.com/AnnaWilliford/2017-11-11-UTA/raw/gh-pages/workshop/images/Git_push.png)
-
----
-
-**Challenge 6.1**
-```
+## Optional Activity
 Suppose you want to add another file to your repository. 
-Download command history file for R_into lesson from yesterday and 
+Download command history file for the Python lesson this morning and 
 add it to your local directory and then push it to Github.
 
-https://www.dropbox.com/s/hifr9hn3y2v7sy6/R_commands.R?dl=0
-
-```
+https://hackmd.io/IwQwrCAMCmDGAcBaSB2eAjRAWAbAZgCZEQRhpFgth4cAzKgEwIeiA===?both
 
 
-## 7. Working with and/or contributing to someone else's projects
-
-
-![](https://github.com/AnnaWilliford/2017-11-11-UTA/raw/gh-pages/workshop/images/Github_fork.png)
-
----
-
-![](https://github.com/AnnaWilliford/2017-11-11-UTA/raw/gh-pages/workshop/images/Github_pullRequest.png)
-
----
-
+## 6. Working with and/or contributing to someone else's projects
 This part of the lesson is modified from this [Source](https://help.github.com/articles/creating-a-pull-request-from-a-fork/)
 
-You can contribute to whatever project you like. Suppose you would like to add a new feature to someone else's project. You can always propose your changes - in Github language this is known as  `pull request`.
+You can contribute to whatever project you like. Suppose you would like to add a new feature to someone else's project. You can always propose your changes; in GitHub language, this is known as  `pull request`.
 
 Steps for making pull requests (or PRs):
 
 - go to the project you want to contribute to
-  (https://github.com/AnnaWilliford/SWC_fall2017_lessons)
+  (https://github.com/pow123/SWC_2018-02-25)
 
-- copy the project to your Github account by clicking `fork` button on the top right corner of the page
+- copy the project to your GitHub account by clicking `fork` button on the top right corner of the page.
 
-You should now have a new repository called `SWC_fall2017_lessons` in **YOUR** account. This is great, you can copy other projects/repositories to your Github account!
+You should now have a new repository called `SWC_2018-02-25` in **YOUR** account. You can now copy other projects/repositories to your GitHub account!
 
-You can also copy remote repository to the local machine, say to the Desktop. From your local terminal, type:
+You can also copy a remote repository to the local machine, let's say, to the Desktop. From your local terminal, type:
 ```
-$ git clone https://github.com/YourUsername/SWC_fall2017_lessons.git ~/Desktop/SWC_fall2017_lessons.git
+$ git clone https://github.com/YourUsername/SWC_2018-02-25.git ~/Desktop/SWC_2018-02-25.git
 ```
-You now have all lessons from this workshop both on your Github account and on your local machine!
-
-See, you have access to any public repository on Github in a similar way.
+You now have all lessons from this session both on your GitHub account and on your local machine! And, of course, you have access to any public repository on GitHub in a similar way.
 
 Now, what is even better, you can contribute to the project you forked/cloned(copied) by suggesting changes to the documents in the repository. If, for example, you find a better way to explain some topic we were covering in this workshop, you can make changes to the lessons locally on your machine and then send a `pull request` to the owner of repository. The owner will review your changes and decide to accept(merge) proposed changes or reject them.
 
-Want to try?
-Go to `SWC_fall2017_lessons` repo on your local machine and open a new topic branch for the project:
-```
-$ git checkout -b YourName
-```
-You can now modify and add anything you want in this project. When ready with your final contributions, you will be able to send your pull request.
+> ## Want to try?
+> Go to `SWC_2018-02-25` repo on your local machine and open a new topic branch for the project:
+> ```
+> $ git checkout -b YourName
+> ```
+> You can now modify and add anything you want in this project. When ready with your final contributions, you will be able to send your pull request.
+> 
+> For example, add your create new file.
+> ```
+> #create new file
+> $ git add .
+> $ git commit -m "add new file"
+> 
+> #Push your topic branch up to your fork:
+> $ git push origin YourName
+> ```
+> Go to the forked repo on your GitHub account and click on the green `compare & pull request` button
+> 
+> A bit more terminology here: 
+> `base fork` is the repository you'd like to merge changes into. Use the `base branch` drop-down menu to select the branch of the upstream repository you'd like to merge changes into.
+> 
+> Use the `head fork` drop-down menu to select your fork, then use the compare branch drop-down menu to select the branch you made your changes in.
 
-For example, add your create new file, say "R_intro_NewChallenge"
-```
-#create new file
-$ git add .
-$ git commit -m "add new file"
-
-#Push your topic branch up to your fork:
-$ git push origin YourName
-```
-Go to the forked repo on your GitHub account and click on the green `compare & pull request` button
-
-A bit more terminology here: 
-`base fork` is the repository you'd like to merge changes into. Use the `base branch` drop-down menu to select the branch of the upstream repository you'd like to merge changes into.
-
-Use the `head fork` drop-down menu to select your fork, then use the compare branch drop-down menu to select the branch you made your changes in.
-
-Type a title and description for your pull request.
-
-Click `Create pull request`
-
-The owner of repository will get notification about pull request and will review your proposed changes.
-
-## 8. Direct Collaboration on Github
-
-![](https://github.com/AnnaWilliford/2017-11-11-UTA/raw/gh-pages/workshop/images/Github_collaborate.png)
+> Type a title and description for your pull request.
+> 
+> Click `Create pull request`
+> 
+> The owner of repository will get notification about pull request and will review your proposed changes.
+{: .callout}
 
 
-Now you try to collaborate with each other and one of you with me.
-
-To add collaborators to our project:
-On your github account under repository you want to collaborate, go to:
-seetings-> add collaborator
-Wait for Collaborator to accept invitation. The invitation comes as notification - you can read it by clicking a bell icon in the top right corner of the Github page.
-
-Next, the Collaborator needs to download a copy of the Owner’s repository to her machine. This is called “cloning a repo”. To clone the Owner’s repo into her Desktop folder, the Collaborator enters:
-```
-$ git clone https://github.com/username/repositoryName.git ~/Desktop/repositoryName
-```
-The Collaborator can now make a change in her clone of the Owner’s repository, exactly the same way as we’ve been doing before:
-
-```
-#in ~/Desktop/repositoryName
-#add new file to the project
-$ echo "comments" > Comments.txt
-$ git status
-$ git add .
-$ git commit -m "added Comments.txt file"
-```
-Then push the change to the **Owner’s** repository on GitHub:
-```
-$ git push -u origin master
-```
-Note that we didn’t have to create a remote called origin: Git uses this name by default when we clone a repository. You can check the URL associated with `origin`
-```
-$ git config --get remote.origin.url
-```
-Take a look at the Owner’s repository on GitHub website now (maybe you need to refresh your browser.) You should be able to see the new commit made by the Collaborator.
-
-To download the Collaborator’s changes from GitHub, the Owner now enters:
-```
-$ git pull origin master
-```
-In practice, it is good to be sure that you have an updated version of the repository you are collaborating on, so you should `git pull` before making our changes. The basic collaborative workflow would be:
-
-- update your local repo with git pull origin master,
-- make your changes and stage them with git add,
-- commit your changes with git commit -m, and
-- upload the changes to GitHub with git push origin master
-
-It is better to make many commits with smaller changes rather than of one commit with massive changes: small commits are easier to read and review.
